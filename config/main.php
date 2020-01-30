@@ -1,6 +1,9 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
+$modules = require __DIR__ . '/modules.php';
+$url_rules = require __DIR__ . '/url_rules.php';
+$app = dirname(__DIR__);
 
 $db = [
     'class' => 'yii\db\Connection',
@@ -30,6 +33,9 @@ return [
         'aliases' => [
             '@bower' => '@vendor/bower-asset',
             '@npm' => '@vendor/npm-asset',
+            '@root' => $app,
+            '@web' => $app . '/web',
+            '@media' => $app . '/web/media',
         ],
         'components' => [
             'request' => [
@@ -80,8 +86,7 @@ return [
                 'enablePrettyUrl' => true,
                 'showScriptName' => false,
                 'enableLanguageDetection' => false,
-                'rules' => [
-                ],
+                'rules' => $url_rules,
             ],
         ],
         'modules' => [
@@ -91,7 +96,20 @@ return [
                 'userSettings' => [
                     'class' => \Da\User\Module::class,
                     'administratorPermissionName' => 'admin'
-                ]
+                ],
+                'composeMenu' => function ($user, $roles, $authManager) {
+                    /**
+                     * @var \yii\web\User $user
+                     * @var string[] $roles
+                     * @var \Da\User\Component\AuthDbManagerComponent $authManager
+                     */
+                    if ($user->can('admin')) {
+                        return require __DIR__ . '/menu/admin.php';
+                    }
+
+                    return [];
+                },
+                'modules' => $modules
             ],
         ],
         'params' => $params,
