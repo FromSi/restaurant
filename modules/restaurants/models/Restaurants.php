@@ -4,6 +4,9 @@ namespace app\modules\restaurants\models;
 
 use app\modules\tables\models\Tables;
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "restaurants".
@@ -34,7 +37,8 @@ class Restaurants extends \yii\db\ActiveRecord
     {
         return [
             [['is_active'], 'integer'],
-            [['name', 'image', 'address'], 'string', 'max' => 255],
+            [['name', 'address'], 'string', 'max' => 255],
+            ['image', 'image', 'on' => ['create', 'update', 'default'], 'extensions' => ['jpg', 'png', 'jpeg']],
             [['description'], 'string', 'max' => 1000],
         ];
     }
@@ -69,5 +73,21 @@ class Restaurants extends \yii\db\ActiveRecord
     public static function find()
     {
         return new RestaurantsQuery(get_called_class());
+    }
+
+    public function behaviors()
+    {
+        return [
+            'imageUpload' => [
+                'class' => 'Bridge\Core\Behaviors\BridgeUploadImageBehavior',
+                'attribute' => 'image',
+                'path' => '@webroot/media/restaurants/{id}',
+                'url' => '@web/media/restaurants/{id}',
+                'scenarios' => ['create', 'update', 'default', 'delete'],
+                'thumbs' => [
+                    'medium' => ['width' => 1000]
+                ],
+            ]
+        ];
     }
 }
