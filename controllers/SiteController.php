@@ -2,9 +2,13 @@
 
 namespace app\controllers;
 
+use app\modules\menu_items\models\MenuItems;
+use app\modules\requests\models\Request;
+use app\modules\tables\models\Tables;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
@@ -54,73 +58,26 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
         return $this->render('index');
     }
 
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
+    public function actionTables($id)
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
+        $models = Tables::findAll(['restaurant_id' => $id]);
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if (!empty($models)) {
+            return $this->render('tables', compact('models'));
+        } else {
+            throw new NotFoundHttpException();
         }
-        return $this->render('login', [
-            'model' => $model,
-        ]);
     }
 
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
+    public function actionMenu($id)
     {
-        Yii::$app->user->logout();
+        $models = Request::findAll(['table_id' => $id]);
 
-        return $this->goHome();
-    }
-
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
+        return $this->render('menu', compact('models'));
     }
 }
