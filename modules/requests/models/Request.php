@@ -56,6 +56,13 @@ class Request extends \yii\db\ActiveRecord
         return $this->hasMany(RequestItems::className(), ['request_id' => 'id']);
     }
 
+    public function getSum(){
+        return RequestItems::find()
+            ->joinWith('menuItem')
+            ->where(['request_id' => $this->id])
+            ->sum('menu_items.price');
+    }
+
     public function getRequestStatus(){
         return $this->hasOne(RequestStatuses::className(), ['id' => 'request_status_id']);
     }

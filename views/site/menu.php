@@ -43,7 +43,7 @@ $this->registerJsFile('/js/menu.js', ['position' => Yii\web\view::POS_END, 'depe
                                     <div class="d-flex w-100 justify-content-between">
                                         <h5><?= $value->name ?> <span class="badge badge-dark" style="font-size: 50%;"><?= $value->menuType->name ?></span>
                                         </h5>
-                                        <strong><?= $value->price ?> <?= Yii::t('frontend', 'тг') ?></strong>
+                                        <strong><?= number_format($value->price, 2, ',', ' ') ?> <?= Yii::t('frontend', 'тг') ?></strong>
                                     </div>
                                     <p class="mb-1"><?= $value->description ?></p>
                                 </div>
@@ -57,29 +57,45 @@ $this->registerJsFile('/js/menu.js', ['position' => Yii\web\view::POS_END, 'depe
 
             </div>
             <div class="tab-pane fade" id="list-history" role="tabpanel" aria-labelledby="list-history-list">
-                <div class="card bg-light mb-3">
-                    <div class="card-header"><?= Yii::t('frontend', 'Сумма') ?>: 100 000 тг</div>
-                    <div class="card-body">
 
-                        <div class="list-group">
-                            <li class="list-group-item"> <!-- active -->
-                                <div class="media">
-                                    <img src="images/2.jpg" alt="Кофе" width="100" height="100"
-                                         style="margin-right: 16px;">
-                                    <div class="media-body">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h5>Кофе <span class="badge badge-dark"
-                                                           style="font-size: 50%;">Категория</span></h5>
-                                            <strong>200 тг</strong>
+                <?php foreach (\app\modules\requests\models\Request::find()->all() as $value): ?>
+
+                    <div class="card bg-light mb-3">
+                        <div class="card-header"><?= Yii::t('frontend', 'Сумма') ?>: <?= number_format($value->getSum(), 2, ',', ' ') ?> <?= Yii::t('frontend', 'тг') ?></div>
+                        <div class="card-body">
+
+                            <?php foreach ($value->requestItems as $value2): ?>
+
+                                <div class="list-group">
+                                    <li class="list-group-item"> <!-- active -->
+                                        <div class="media">
+
+                                            <?php if (!empty($value2->menuItem->image)): ?>
+
+                                                <img src="/media/menu_items/<?= $value2->menuItem->id ?>/medium-<?= $value2->menuItem->image ?>" alt="<?= $value2->menuItem->name ?>" width="100" height="100"
+                                                     style="margin-right: 16px;">
+
+                                            <?php endif; ?>
+
+                                            <div class="media-body">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h5><?= $value2->menuItem->name ?> <span class="badge badge-dark" style="font-size: 50%;"><?= $value2->menuItem->menuType->name ?></span>
+                                                    </h5>
+                                                    <strong><?= number_format($value2->menuItem->price, 2, ',', ' ') ?> <?= Yii::t('frontend', 'тг') ?></strong>
+                                                </div>
+                                                <p class="mb-1"><?= $value2->menuItem->description ?></p>
+                                            </div>
                                         </div>
-                                        <p class="mb-1">Описание кофе</p>
-                                    </div>
+                                    </li>
                                 </div>
-                            </li>
-                        </div>
 
+                            <?php endforeach; ?>
+
+                        </div>
                     </div>
-                </div>
+
+                <?php endforeach; ?>
+
             </div>
         </div>
     </div>
