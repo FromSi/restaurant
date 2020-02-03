@@ -3,6 +3,8 @@
 namespace app\modules\requests\models;
 
 use app\modules\request_items\models\RequestItems;
+use app\modules\request_statuses\models\RequestStatuses;
+use app\modules\tables\models\Tables;
 use Yii;
 
 /**
@@ -52,6 +54,14 @@ class Request extends \yii\db\ActiveRecord
     public function getRequestItems()
     {
         return $this->hasMany(RequestItems::className(), ['request_id' => 'id']);
+    }
+
+    public function getRequestStatus(){
+        return $this->hasOne(RequestStatuses::className(), ['id' => 'request_status_id']);
+    }
+
+    public function getTable(){
+        return $this->hasOne(Tables::className(), ['id' => 'table_id']);
     }
 
     /**

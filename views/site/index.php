@@ -6,7 +6,7 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">Ресторан</li>
+        <li class="breadcrumb-item active" aria-current="page"><?= Yii::t('frontend', 'Ресторан') ?></li>
     </ol>
 </nav>
 

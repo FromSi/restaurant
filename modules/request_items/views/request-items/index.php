@@ -29,11 +29,11 @@ $this->params['contextMenuItems'] = [
         [
             'attribute' => 'request_id',
             'value' => function ($data){
-                return $data->request->name;
+                return $data->request->id;
             },
             'filter' => Html::activeDropDownList($searchModel,
                 'request_id',
-                ArrayHelper::map(\app\modules\requests\models\Request::find()->all(), 'id', 'name'), [
+                ArrayHelper::map(\app\modules\requests\models\Request::find()->all(), 'id', 'id'), [
                     'prompt' => Yii::t('app', 'Выберите ...'),
                     'class' => 'form-control'
                 ])

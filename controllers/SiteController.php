@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\modules\menu_items\models\MenuItems;
+use app\modules\request_items\models\RequestItems;
 use app\modules\requests\models\Request;
 use app\modules\tables\models\Tables;
 use Yii;
@@ -78,6 +79,36 @@ class SiteController extends Controller
     {
         $models = Request::findAll(['table_id' => $id]);
 
-        return $this->render('menu', compact('models'));
+        return $this->render('menu', compact('models', 'id'));
+    }
+
+    public function actionRequestAjax(){
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+
+            $response = Yii::$app->response;
+            $response->format = \yii\web\Response::FORMAT_JSON;
+
+            if (!empty($data['ids']) && !empty($data['id'])){
+                $list = explode(',', $data['ids']);
+                $request = new Request;
+                $request->request_status_id = 1;
+                $request->table_id = $data['id'];
+
+                if ($request->save()){
+                    foreach ($list as $value){
+                        $item = new RequestItems;
+                        $item->menu_item_id = $value;
+                        $item->request_id = $request->id;
+
+                        $item->save();
+                    }
+                }
+            }
+
+            $response->statusCode = 200;
+
+            return $response;
+        }
     }
 }

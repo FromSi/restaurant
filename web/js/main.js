@@ -75,9 +75,6 @@ module.exports = __webpack_require__(2);
 /* 1 */
 /***/ (function(module, exports) {
 
-$(function () {
-  return console.log('Welcome, developer!');
-});
 
 /***/ }),
 /* 2 */
