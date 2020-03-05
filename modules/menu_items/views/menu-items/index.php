@@ -26,6 +26,7 @@ $this->params['contextMenuItems'] = [
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
 
+        'id',
         [
             'attribute' => 'menu_type_id',
             'value' => function ($data){

@@ -23,7 +23,7 @@ $this->params['contextMenuItems'] = [
             [
                 'attribute' => 'menu_type_id',
                 'value' => function ($data){
-                    return $data->menuType->title;
+                    return $data->menuType->name;
                 }
             ],
             'name',

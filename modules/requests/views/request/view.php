@@ -23,13 +23,13 @@ $this->params['contextMenuItems'] = [
             [
                 'attribute' => 'request_status_id',
                 'value' => function ($data){
-                    return $data->requestStatus->title;
+                    return $data->requestStatus->name;
                 }
             ],
             [
                 'attribute' => 'table_id',
                 'value' => function ($data){
-                    return $data->table->title;
+                    return $data->table->name;
                 }
             ],
         ],

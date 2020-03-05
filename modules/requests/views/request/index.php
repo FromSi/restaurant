@@ -13,7 +13,13 @@ $this->title = Yii::t('app', 'Заявки');
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['contextMenuItems'] = [
     ['create'],
+    [
+        'label' => \Yii::t('admin', 'Экспорт в Excel'),
+        'url' => \yii\helpers\Url::to('/document/report'),
+        'class' => 'btn-info'
+    ],
 ];
+
 ?>
 
 <?= GridView::widget([
@@ -26,6 +32,7 @@ $this->params['contextMenuItems'] = [
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
 
+        'id',
         [
             'attribute' => 'request_status_id',
             'value' => function ($data){
