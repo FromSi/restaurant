@@ -31,6 +31,8 @@ $('.btn-send-request').on('click', function (e) {
 });
 
 $('.item-list-menu').on('click', function (e) {
+    e.preventDefault();
+
     if (!$(e.target).closest('a').hasClass('active')){
         $(e.target).closest('a').addClass('active');
     } else {
